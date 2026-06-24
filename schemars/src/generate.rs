@@ -406,6 +406,21 @@ impl SchemaGenerator {
         &self.definitions
     }
 
+    /// Returns an iterator pairing each generated definition's
+    /// [name](JsonSchema::schema_name) with the [schema id](JsonSchema::schema_id) it was
+    /// generated from.
+    ///
+    /// Unlike the name, a schema id uniquely identifies a Rust type (including its generic
+    /// parameters and module path), so it can be used to correlate definitions produced by two
+    /// separate generators — for example one [`for_serialize`](SchemaSettings::for_serialize) and
+    /// one [`for_deserialize`](SchemaSettings::for_deserialize) — even when otherwise distinct
+    /// types would share a name.
+    pub fn schema_names_to_ids(&self) -> impl Iterator<Item = (&str, &str)> {
+        self.schema_id_to_name
+            .iter()
+            .map(|(SchemaUid(id, _), name)| (name.as_ref(), id.as_ref()))
+    }
+
     /// Mutably borrows the collection of all [non-inlined](JsonSchema::inline_schema)
     /// schemas that have been generated.
     ///
