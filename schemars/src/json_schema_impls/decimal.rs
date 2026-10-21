@@ -60,6 +60,7 @@ impl JsonSchema for rust_decimal1::Decimal {
             let ty = "number";
             let mut result = Schema::default();
             result.insert("type".to_owned(), ty.into());
+            result.insert("format".to_owned(), "decimal".into());
             return result;
         }
 
